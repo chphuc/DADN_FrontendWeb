@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Slider from '@mui/material/Slider'
 import { BiLock } from 'react-icons/bi';
-const ControllItem = ({ data, isSetting }) => {
+const ControllItem = ({ data, isSetting, onOffOnly = false, setDataFunction }) => {
     const [toggle, setToggle] = useState(data.isOpen);
-    const [valueSlider, setValueSlider] = useState(data.curValue);
+    const [valueSlider, setValueSlider] = useState(+data.curValue);
+
     const marks = [
         {
             value: data.minValue,
@@ -29,14 +30,22 @@ const ControllItem = ({ data, isSetting }) => {
     const handleToggle = () => {
         if (isSetting) {
             setToggle((prev) => {
-                if (!prev) setValueSlider((data.maxValue + data.minValue) * 0.5)
+                if (!prev) setValueSlider(data.maxValue)
+                else {
+                    setValueSlider(0)
+                    setDataFunction((prev) => ({ ...prev, curValue: 0 }))
+                }
                 return !prev
             })
         }
     }
     const handleOnchangeSlider = (e) => {
-        setValueSlider(e.target.value)
+        if (toggle) {
+            setValueSlider(e.target.value)
+            setDataFunction((prev) => ({ ...prev, curValue: e.target.value }))
+        }
     }
+
     return (
         <>
             <div className="w-full p-4 shadow-lg bg-white rounded-md">
@@ -65,7 +74,7 @@ const ControllItem = ({ data, isSetting }) => {
                     </div>
                 </div>
                 <div className="px-4 mt-4">
-                    <Slider onChange={(e) => handleOnchangeSlider(e)} disabled={!isSetting} value={toggle ? valueSlider : 0} min={data.minValue} max={data.maxValue} marks={marks} valueLabelDisplay="auto" />
+                    {!onOffOnly && <Slider onChange={(e) => handleOnchangeSlider(e)} disabled={!isSetting} value={toggle ? valueSlider : 0} min={data.minValue} max={data.maxValue} marks={marks} valueLabelDisplay="auto" />}
                 </div>
             </div>
         </>

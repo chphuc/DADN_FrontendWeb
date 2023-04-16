@@ -2,10 +2,14 @@ import { AiOutlineFundView } from 'react-icons/ai';
 import { IoMdNotificationsOutline } from 'react-icons/io';
 import { AiOutlineControl } from 'react-icons/ai';
 import { BiLogOut } from 'react-icons/bi';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux'
+import { signOut } from '../features/user/userSlice'
 
 const Navbar = () => {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+
     const mainLink = [
         {
             icon: <AiOutlineFundView />,
@@ -27,7 +31,8 @@ const Navbar = () => {
             title: 'Logout',
             onClick: () => {
                 // ...
-                navigate('/login')
+                dispatch(signOut())
+                navigate('/')
             }
         }
     ]

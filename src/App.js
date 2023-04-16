@@ -15,12 +15,11 @@ function App() {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path="/" element={<DefaultLayout Component={Overview} />} />
+				<Route path="/" element={<Login />} />
+				<Route path="/signup" element={<Signup />} />
 				<Route path="/overview" element={<DefaultLayout Component={Overview} />} />
 				<Route path="/notification" element={<DefaultLayout Component={Notification} />} />
 				<Route path="/controll" element={<DefaultLayout Component={Controll} />} />
-				<Route path="/login" element={<Login />} />
-				<Route path="/signup" element={<Signup />} />
 			</Routes>
 		</BrowserRouter>
 	);

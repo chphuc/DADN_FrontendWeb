@@ -1,10 +1,42 @@
+import { useState } from 'react'
 import { Link, useNavigate } from "react-router-dom"
+import axios from '../../axios'
+import { useDispatch } from 'react-redux'
+import { signIn } from '../../features/user/userSlice'
 
 const Index = () => {
     const navigate = useNavigate()
-    const handleSubmit = () => {
-        //success
-        navigate('/')
+    const dispatch = useDispatch()
+    
+    const [data, setData] = useState({
+        username: '',
+        password: '',
+    })
+    const [isErr, setIsErr] = useState({
+        isShow: false,
+        message: ''
+    })
+    const handleOnchange = (e) => {
+        setData((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value
+        }))
+    }
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        if (!data.username || !data.password) {
+            setIsErr({ isShow: true, message: 'Missing data!' })
+            return
+        }
+
+        axios.post('/login', { username: data.username, password: data.password })
+            .then(res => {
+                if (res.status == 200) {
+                    dispatch(signIn())
+                    navigate('/overview')
+                }
+            })
+            .catch(err => setIsErr({ isShow: true, message: err.response.data.message }))
     }
     return (
         <>
@@ -18,22 +50,22 @@ const Index = () => {
                         <form onSubmit={handleSubmit} className="mt-6" action="#" method="POST">
                             <div>
                                 <label className="block text-gray-700">Username</label>
-                                <input type="text" placeholder="Enter Username" className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none" autofocus autocomplete required />
+                                <input type="text" name="username" value={data.username} onChange={handleOnchange} placeholder="Enter Username" className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none" autoFocus autoComplete="true" />
                             </div>
 
                             <div className="mt-4">
                                 <label className="block text-gray-700">Password</label>
-                                <input type="password" placeholder="Enter Password" minlength="6" className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none" required />
+                                <input type="password" name="password" value={data.password} onChange={handleOnchange} placeholder="Enter Password" className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none" />
                             </div>
 
-                            <div className="text-right mt-2">
-                                <a href="#" className="text-sm font-semibold text-gray-700 hover:text-blue-700 focus:text-blue-700">Forgot Password?</a>
+                            <div className="mt-4">
+                                {isErr.isShow && <div className="bg-red-100 text-red-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-red-900 dark:text-red-300">{isErr.message}</div>}
                             </div>
 
                             <button type="submit" className="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg px-4 py-3 mt-6">Log In</button>
                         </form>
                         <hr className="my-6 border-gray-300 w-full" />
-                        <p className="mt-8">Need an account? <Link to="/signup" class="text-blue-500 hover:text-blue-700 font-semibold">Create an account</Link></p>
+                        <p className="mt-8">Need an account? <Link to="/signup" className="text-blue-500 hover:text-blue-700 font-semibold">Create an account</Link></p>
                     </div>
                 </div>
             </div>
