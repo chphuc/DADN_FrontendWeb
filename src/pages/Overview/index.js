@@ -34,12 +34,12 @@ const Index = () => {
     const [typeChart, setTypeChart] = useState(0)
     const [dataChart, setDataChart] = useState()
     const handleChangeTypeChart = () => {
-        setTypeChart((prev) => (prev == 0 ? 1 : 0))
+        setTypeChart((prev) => (prev === 0 ? 1 : 0))
     }
 
     useEffect(() => {
         if (!user) navigate('/')
-    }, [])
+    }, [user])
 
     useEffect(() => {
         axios.post('/devices', { name: 'temperature' })

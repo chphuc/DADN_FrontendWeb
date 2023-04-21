@@ -31,7 +31,7 @@ const Index = () => {
 
         axios.post('/login', { username: data.username, password: data.password })
             .then(res => {
-                if (res.status == 200) {
+                if (res.status === 200) {
                     dispatch(signIn())
                     navigate('/overview')
                 }

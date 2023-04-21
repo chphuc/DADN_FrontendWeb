@@ -29,7 +29,7 @@ const Index = () => {
 
     useEffect(() => {
         if (!user) navigate('/')
-    }, [])
+    }, [user]) 
 
     useEffect(() => {
         axios.get('/pump')

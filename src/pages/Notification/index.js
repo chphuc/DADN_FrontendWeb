@@ -40,19 +40,19 @@ const Index = () => {
 
     useEffect(() => {
         if (!user) navigate('/')
-    }, [])
+    }, [user])
 
     useEffect(() => {
         axios.get('/threshold')
             .then(data => {
                 data.data.map(dataItem => {
-                    if (dataItem.type == 'temp') {
+                    if (dataItem.type === 'temp') {
                         setContrainsTemperature((prev) => ({ ...prev, min: dataItem.min, max: dataItem.max }))
                     }
-                    if (dataItem.type == 'lux') {
+                    if (dataItem.type === 'lux') {
                         setContrainsLight((prev) => ({ ...prev, min: dataItem.min, max: dataItem.max }))
                     }
-                    if (dataItem.type == 'humidity') {
+                    if (dataItem.type === 'humidity') {
                         setContrainsHumidity((prev) => ({ ...prev, min: dataItem.min, max: dataItem.max }))
                     }
                 })
@@ -110,7 +110,7 @@ const Index = () => {
                         </div>
                         <div className="col-span-9 p-4 overflow-y-scroll no-scrollbar shadow-lg bg-white rounded-md" style={{ maxHeight: 'calc(100vh - 100px)' }}>
                             {data.map((item, index) => (
-                                <div key={index} className={" " + (index != 0 ? "mt-4" : "")}>
+                                <div key={index} className={" " + (index !== 0 ? "mt-4" : "")}>
                                     <NotificationItem time={item.time} title={item.title} content={item.content} />
                                 </div>
                             ))}

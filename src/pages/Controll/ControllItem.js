@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Slider from '@mui/material/Slider'
 import { BiLock } from 'react-icons/bi';
 const ControllItem = ({ data, isSetting, onOffOnly = false, setDataFunction }) => {
@@ -30,7 +30,10 @@ const ControllItem = ({ data, isSetting, onOffOnly = false, setDataFunction }) =
     const handleToggle = () => {
         if (isSetting) {
             setToggle((prev) => {
-                if (!prev) setValueSlider(data.maxValue)
+                if (!prev) {
+                    setValueSlider(1)
+                    setDataFunction((prev) => ({ ...prev, curValue: 1 }))
+                }
                 else {
                     setValueSlider(0)
                     setDataFunction((prev) => ({ ...prev, curValue: 0 }))
